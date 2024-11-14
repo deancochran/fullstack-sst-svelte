@@ -1,14 +1,19 @@
 import { defineConfig } from 'drizzle-kit';
-if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
+import { Resource } from 'sst';
 
 export default defineConfig({
+	dialect: "postgresql",
 	schema: './src/lib/server/db/schema.ts',
-
+	out: './drizzle',
 	dbCredentials: {
-		url: process.env.DATABASE_URL
+		ssl: {
+			rejectUnauthorized: false,
+		},
+		host: Resource.MyPostgres.host,
+		port: Resource.MyPostgres.port,
+		user: Resource.MyPostgres.username,
+		password: Resource.MyPostgres.password,
+		database: Resource.MyPostgres.database,
 	},
 
-	verbose: true,
-	strict: true,
-	dialect: 'postgresql'
 });
